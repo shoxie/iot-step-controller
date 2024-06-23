@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col justify-center space-y-48 items-center min-h-screen bg-[#191724]">
+    <div className="flex flex-col justify-center space-y-48 w-full items-center min-h-screen bg-[#191724]">
       
       <BoxTable boxesData={boxesData} />
     </div>

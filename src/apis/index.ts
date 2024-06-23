@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const moveBox = async (instructions: MovementInstruction[]) => {
   try {
-    const response = await axios.post(`http://172.20.10.2:5000/motor/move`, instructions);
+    const response = await axios.post(`http://192.168.35.220:5000/motor/move`, instructions);
     return response.data;
   } catch (e) {
     console.log(e);

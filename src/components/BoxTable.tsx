@@ -1,7 +1,7 @@
 import { BoxTableProps, CursorPosition, MovementInstruction, NullableBoxData } from '@/types';
 import { useEffect, useState } from 'react';
-import { Field, Input, Label } from '@headlessui/react'
 import { moveBox } from '@/apis';
+import { Input } from '@chakra-ui/react'
 
 const BOX_SIZE = 4000;
 const BORDER_SIZE = 100;
@@ -97,10 +97,7 @@ const BoxTable: React.FC<BoxTableProps> = ({ boxesData }) => {
     return (
         <>
             <div>
-                <Field className="flex flex-col space-y-5">
-                    <Label>Server ip</Label>
-                    <Input name="full_name" type="text" className="focus:outline-none text-black pl-2" onKeyDown={(e) => e.key === 'Enter' && setServerURL(serverURL)} value={serverURL} onChange={(e) => setServerURL(e.target.value)} />
-                </Field>
+                <Input className='text-white' placeholder='Server IP' value={serverURL} onChange={(e) => setServerURL(e.target.value)} />
             </div>
             <div className="grid grid-cols-3 gap-4 p-4">
                 {boxesData.map((data, index) => (
