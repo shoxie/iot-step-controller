@@ -21,8 +21,9 @@ const Header = () => {
             animate={{ 
                 position: "fixed",
                 top: "95%",
-                left: isClosed ? "2%" : "26%"
+                left: isClosed ? 5 : 350
              }}
+             zIndex={5}
         >
             <Sidebar onCloseEvent={handleClose} />
         </Box>

@@ -1,4 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
+import { border, extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 import { use } from "react";
 
@@ -13,6 +13,10 @@ const colors = {
         light: "#575279",
         dark: "#e0def4",
       },
+      border: {
+        light: "#1f1d2e",
+        dark: "#f6c177",
+      }
     },
   },
   components: {
@@ -33,6 +37,7 @@ const styles = {
         colors.global.body.default.dark
       )(props),
       bg: mode(colors.global.body.bg.light, colors.global.body.bg.dark)(props),
+      border: mode(colors.global.body.border.light, colors.global.body.border.dark)(props),
     },
   }),
 };

@@ -96,9 +96,9 @@ const BoxTable: React.FC<BoxTableProps> = ({ boxesData }) => {
 
     return (
         <>
-            <div>
+            {/* <div>
                 <Input className='text-white' placeholder='Server IP' value={serverURL} onChange={(e) => setServerURL(e.target.value)} />
-            </div>
+            </div> */}
             <div className="grid grid-cols-3 gap-4 p-4">
                 {boxesData.map((data, index) => (
                     <div
