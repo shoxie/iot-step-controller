@@ -1,14 +1,16 @@
 import { BoxTableProps, CursorPosition, MovementInstruction, NullableBoxData } from '@/types';
 import { useEffect, useState } from 'react';
-import { moveBox } from '@/apis';
+import { cleanup, dragBox, dropBox, moveBox } from '@/apis';
 import { Input } from '@chakra-ui/react'
+import { currentBoxAtom } from '@/lib/atom';
+import { useAtom } from 'jotai';
 
-const BOX_SIZE = 4000;
-const BORDER_SIZE = 100;
+const BOX_SIZE = 12500;
+const BORDER_SIZE = 1000;
 const EFFECTIVE_DISTANCE = BOX_SIZE - 2 * BORDER_SIZE;
 
 const BoxTable: React.FC<BoxTableProps> = ({ boxesData }) => {
-    const [currentBox, setCurrentBox] = useState<number>(0)
+    const [currentBox, setCurrentBox] = useAtom(currentBoxAtom);
     const [cursorPosition, setCursorPosition] = useState<CursorPosition>({
         x: {
             units: 0,
@@ -24,10 +26,12 @@ const BoxTable: React.FC<BoxTableProps> = ({ boxesData }) => {
 
     const handleMoveCursor = async (start: number, destination: number) => {
         const { instructions, finalPosition } = calculatePath(start, destination);
-        console.log(instructions);
         setCursorPosition(finalPosition);
         try {
+            // await dragBox()
             await moveBox(instructions)
+            // await dropBox()
+            // await cleanup()
         } catch (e) {
             console.log(e)
         }
@@ -103,7 +107,7 @@ const BoxTable: React.FC<BoxTableProps> = ({ boxesData }) => {
                 {boxesData.map((data, index) => (
                     <div
                         key={index}
-                        className="flex items-center justify-center h-24 w-24 border border-gray-300 bg-gray-100 text-black cursor-pointer"
+                        className={`flex items-center justify-center h-24 w-24 border border-gray-300 bg-gray-100 text-black cursor-pointer ${currentBox === index ? 'border-2 border-red-500 p-1' : ''}`}
                         onClick={() => {
                             handleMoveCursor(currentBox, index);
                             setCurrentBox(index);
