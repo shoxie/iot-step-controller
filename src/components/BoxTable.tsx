@@ -1,9 +1,9 @@
 import { BoxTableProps, CursorPosition, MovementInstruction, NullableBoxData } from '@/types';
 import { useEffect, useState } from 'react';
 import { cleanup, dragBox, dropBox, moveBox } from '@/apis';
-import { Input } from '@chakra-ui/react'
-import { currentBoxAtom } from '@/lib/atom';
+import { currentBoxAtom, serverURLAtom } from '@/lib/atom';
 import { useAtom } from 'jotai';
+import { useToast, Input } from '@chakra-ui/react'
 
 const BOX_SIZE = 12500;
 const BORDER_SIZE = 1000;
@@ -22,18 +22,40 @@ const BoxTable: React.FC<BoxTableProps> = ({ boxesData }) => {
             axis: "y",
         }
     });
-    const [serverURL, setServerURL] = useState<string>('');
+    const [serverURL, setServerURL] = useAtom(serverURLAtom);
+    const toast = useToast()
 
     const handleMoveCursor = async (start: number, destination: number) => {
+        if (serverURL === '') {
+            toast({
+                title: 'Server URL is not set',
+                description: 'Please set the server URL in the parameters tab.',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
+            return;
+        }
         const { instructions, finalPosition } = calculatePath(start, destination);
         setCursorPosition(finalPosition);
         try {
             // await dragBox()
-            await moveBox(instructions)
+            await moveBox(instructions, serverURL)
             // await dropBox()
             // await cleanup()
-        } catch (e) {
+
+            setCurrentBox(destination);
+
+        } catch (e: any) {
             console.log(e)
+
+            toast({
+                title: 'Error',
+                description: e.response.data ?? "Unknown error",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
         }
     };
 
@@ -110,7 +132,6 @@ const BoxTable: React.FC<BoxTableProps> = ({ boxesData }) => {
                         className={`flex items-center justify-center h-24 w-24 border border-gray-300 bg-gray-100 text-black cursor-pointer ${currentBox === index ? 'border-2 border-red-500 p-1' : ''}`}
                         onClick={() => {
                             handleMoveCursor(currentBox, index);
-                            setCurrentBox(index);
                         }}
                     >
                         {data?.name}
